@@ -76,8 +76,6 @@ void store_psinfo(psinfo* ary, int pid, int i)
 
 	input = NULL;
 
-	//printf("pid = %d\n", pid);
-
 	sprintf(curPid, "%d", pid);
 	
 	if(pid)
