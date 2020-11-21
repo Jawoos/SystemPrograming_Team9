@@ -1,6 +1,6 @@
 CC = gcc
 TARGET = out
-OBJS = 
+OBJS = main.o rd.o 
 
 CFLAGS = -Wall
 LDFLAGS = -lc
