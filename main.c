@@ -31,16 +31,13 @@ void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모�
 int main(int argc, char* argv[])
 {
 	
-	printf("this terminal pid : %d\n", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
-	
-	P_SIZE = store_pid();
-	
+	printf("this terminal pid : %d\n", getppid()); //현재 프로세스가 실행되고 있는 터미널pid	
+	P_SIZE = store_pid();	
 	for(int i = 0; i < P_SIZE; i++)
 	{
 		int pid = P[i].pid;
 		store_psinfo(P, pid, i);
-	}
-	
+	}	
 	for(int i = 0; i < bash_SIZE; i++)
 	{
 		int pid = bash[i].pid;
