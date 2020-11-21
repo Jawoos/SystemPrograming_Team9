@@ -67,7 +67,7 @@ void reset_arry(psinfo* ary, int* size)
 
 void store_psinfo(psinfo* ary, int pid, int i)
 {
-	char* curPid;
+	char curPid[20];
 	int cnt = 0;
 	int temp;
 	int ck = 0;
