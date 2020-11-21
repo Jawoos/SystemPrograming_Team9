@@ -75,7 +75,7 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	FILE* input;
 
 	input = NULL;
-	
+
 	sprintf(curPid, "%d", pid);
 	
 	if(pid)
