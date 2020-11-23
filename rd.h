@@ -17,6 +17,8 @@ typedef struct psinfo
 	char state;
 	int ppid;
 	unsigned long long start_time;
+	float runningTime;
+	int checkTokill;
 
 }psinfo;
 

@@ -25,14 +25,27 @@ int get_timesinceboot(long tickspersec) {
   return (sec*tickspersec)+ssec;
 }
 
-void print_timediff(char *name, unsigned long long x, long tickspersec) {
+void print_timedif(char *name, unsigned long long x, float rtime, long tickspersec) 
+{
   int sinceboot = get_timesinceboot(tickspersec);
   int running = sinceboot - x;
   time_t rt = time(NULL) - (running / tickspersec);
   char buf[1024];
 
   strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
-  printf("%s: %s (%lu.%lus)\n", name, buf, running / tickspersec, running % tickspersec);
+  printf("%s: %s (%.2fs)\n", name, buf, rtime);
+}
+
+void make_Time(unsigned long long x, float* rtime)
+{
+	long tickspersec;
+	tickspersec = sysconf(_SC_CLK_TCK);
+	int sinceboot = get_timesinceboot(tickspersec);
+ 	int running = sinceboot - x;
+  	time_t rt = time(NULL) - (running / tickspersec);
+  	char buf[1024];
+
+  	*rtime = running / tickspersec + (running % tickspersec) / 100.0;
 }
 
 void print_psinfo(psinfo* ary, int size)
@@ -45,7 +58,9 @@ void print_psinfo(psinfo* ary, int size)
 	{
 		printf("PID : %d, COMMAND : %s, STATE : %c, PPID : %d, ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
-		print_timediff("start_time", ary[i].start_time, tickspersec);
+		print_timedif("start_time", ary[i].start_time, ary[i].runningTime, tickspersec);
+		printf("%.2f\n", ary[i].runningTime);
+		
 	}
 
 }
@@ -70,12 +85,12 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	char curPid[20];
 	int cnt = 0;
 	int temp;
-	int ck = 0;
+	
 	
 	FILE* input;
 
 	input = NULL;
-
+	
 	sprintf(curPid, "%d", pid);
 	
 	if(pid)
@@ -96,6 +111,7 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	read_str(ary[i].comm, input);
 	read_char(&(ary[i].state), input);
 	read_one(&(ary[i].ppid), input);
+	ary[i].checkTokill = 0;
 		
 	while(cnt < 17)
 	{
@@ -104,6 +120,7 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	}
 	cnt = 0;		
 	read_unsigned(&(ary[i].start_time), input);
+	make_Time(ary[i].start_time, &(ary[i].runningTime));
 	
 	rewind(input);
 	fclose(input);
