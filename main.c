@@ -29,7 +29,8 @@ int getCmdLine(char *file, char *buf); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
 
 int main(int argc, char* argv[])
-{
+{	
+	char input;
 	
 	printf("this terminal pid : %d\n", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
 	
@@ -61,6 +62,37 @@ int main(int argc, char* argv[])
 	
 	printf("==========WANTKILL PROCESS==========\n");
 	print_psinfo(wantkill, WK_SIZE);
+
+	while(1){
+		input = getchar();
+		switch(input){
+			case q:
+				exit(0);
+			case k:
+				printf("kill processor\n");		//wnat_kill process 종료
+			case e:
+				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
+			case b:
+				printf("kill bash processor\n");	//bash 프로세서 종료
+			case t:
+				printf("get time to kill\n");		//일정시간 입력받기
+			case p:									//프로세스 상태 재출력
+					printf("==========ALL PROCESS==========\n");
+					print_psinfo(P, P_SIZE);
+					printf("==========BASH PROCESS==========\n");
+					print_psinfo(bash, bash_SIZE);
+	
+					find_kill(P, bash, P_SIZE, bash_SIZE);
+	
+					printf("==========RESET ARRY==========\n");
+					reset_arry(P, &P_SIZE);
+					print_psinfo(P, P_SIZE);
+					printf("%d\n", P_SIZE);
+	
+					printf("==========WANTKILL PROCESS==========\n");
+					print_psinfo(wantkill, WK_SIZE);
+		}
+	}
 	
 	
 	
