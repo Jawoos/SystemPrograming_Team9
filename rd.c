@@ -59,7 +59,7 @@ void print_psinfo(psinfo* ary, int size)
 		printf("PID : %d, COMMAND : %s, STATE : %c, PPID : %d, ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
 		print_timedif("start_time", ary[i].start_time, ary[i].runningTime, tickspersec);
-		printf("%.2f\n", ary[i].runningTime);
+		
 		
 	}
 
