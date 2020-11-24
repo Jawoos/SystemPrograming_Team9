@@ -1,9 +1,9 @@
 CC = gcc
 TARGET = out
-OBJS = main.o rd.o 
+OBJS = main.o rd.o dokill.o
 
 CFLAGS = -Wall
-LDFLAGS = -lc
+LDFLAGS = -lc 
 
 all : $(TARGET)
 

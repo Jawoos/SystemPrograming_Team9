@@ -1,0 +1,1 @@
+void do_kill(psinfo* ary, int size);
