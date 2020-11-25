@@ -43,8 +43,10 @@ void get_pid(psinfo* ary, int size)
 
 		for(int i = 0; i < size; i++)
 		{
-			if(ary[i].pid == input)
+			if(ary[i].pid == input){
+				printf("pid(%d) is exception\n", ary[i].pid);
 				ary[i].checkTokill = 1;
+			}
 
 		}
 		getchar();
