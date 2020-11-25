@@ -146,6 +146,8 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 				strcpy(wantkill[WK_SIZE].comm, ary1[j].comm);
 				wantkill[WK_SIZE].state = ary1[j].state;
 				wantkill[WK_SIZE].ppid = ary1[j].ppid;
+				wantkill[WK_SIZE].runningTime = ary1[j].runningTime;
+				wantkill[WK_SIZE].checkTokill = 1;
 				wantkill[WK_SIZE++].start_time = ary1[j].start_time;
 			
 			}
@@ -171,6 +173,7 @@ void get_display(){
 	{
 		int pid = bash[i].pid;
 		store_psinfo(bash, pid, i);
+		bash[i].checkTokill = 1;
 	}
 	
 	printf("==============================ALL PROCESS==============================\n");
