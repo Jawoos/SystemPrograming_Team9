@@ -4,9 +4,11 @@
 #include "rd.h"
 
 void do_kill(psinfo* ary, int size){
+	if(size == 0)
+		printf("There is nothing available process to kill\n");
 	for(int i = 0; i < size; i++){
 		printf("print check of pid(%d) : %d and my pid is %d\n", ary[i].pid, ary[i].checkTokill, getpid());
-		if(ary[i].pid != getpid() && ary[i].checkTokill == 1){
+		if(ary[i].pid != getpid() && ary[i].checkTokill == 1 && ary[i].pid != getppid()){
 			printf("processor (%d) will be killed\n", ary[i].pid);
 			kill(ary[i].pid, SIGINT);
 		}
@@ -15,10 +17,13 @@ void do_kill(psinfo* ary, int size){
 
 
 void do_must_kill(psinfo* ary, int size){
+	if(size == 0)
+		printf("There is nothing available process to kill\n");
 	for(int i = 0; i < size; i++){
-		printf("print check of pid(%d) : %d and my pid is %d\n", ary[i].pid, ary[i].checkTokill, getpid());
-		if(ary[i].pid != getpid() && ary[i].checkTokill == 1){
+		printf("print check of pid(%d) : %d and my pid is %d ppid is %d\n", ary[i].pid, ary[i].checkTokill, getpid(), getppid());
+		if(ary[i].pid != getpid() && ary[i].checkTokill == 1 && ary[i].pid != getppid()){
 			printf("processor (%d) will be killed\n", ary[i].pid);
+		//	sleep(60);
 			kill(ary[i].pid, SIGKILL);
 		}
 	}
