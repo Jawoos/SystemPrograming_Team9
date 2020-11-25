@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
 				break;
 			default:
 				printf("you type wrong option please type it right.\n");
+				break;
 		}
 	}
 	
@@ -171,20 +172,21 @@ void get_display(){
 		store_psinfo(bash, pid, i);
 	}
 	
-	printf("==========ALL PROCESS==========\n");
+	printf("==============================ALL PROCESS==============================\n");
 	print_psinfo(P, P_SIZE);
-	printf("==========BASH PROCESS==========\n");
+	printf("==============================BASH PROCESS==============================\n");
 	print_psinfo(bash, bash_SIZE);
 	
 	find_kill(P, bash, P_SIZE, bash_SIZE);
 	
-	printf("==========RESET ARRY==========\n");
+	printf("==============================RESET ARRY==============================\n");
 	reset_arry(P, &P_SIZE);
 	print_psinfo(P, P_SIZE);
 	printf("%d\n", P_SIZE);
 	
-	printf("==========WANTKILL PROCESS==========\n");
+	printf("==============================WANTKILL PROCESS==============================\n");
 	print_psinfo(wantkill, WK_SIZE);
+	printf("================================================================================\n");
 }
 
 
