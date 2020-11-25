@@ -60,7 +60,7 @@ void print_psinfo(psinfo* ary, int size)
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
 		print_timedif("start_time", ary[i].start_time, ary[i].runningTime, tickspersec);
 		
-		
+		printf("	check : %d\n", ary[i].checkTokill);
 	}
 
 }
