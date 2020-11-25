@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 				printf("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
 				scanf(" %c", &input_temp);
 				if(input_temp == 'Y' || input_temp == 'y')
-					do_kill(bash, bash_SIZE);	//bash 프로세서 종료
+					do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
 				break;
 			case 't':
 				printf("get time to kill\n");		//일정시간 입력받기
