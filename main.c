@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
 				break;
 			case 'e':
 				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
+				get_pid(P, P_SIZE);
 				break;
 			case 'b':
 				printf("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");

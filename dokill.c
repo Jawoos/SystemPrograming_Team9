@@ -12,3 +12,29 @@ void do_kill(psinfo* ary, int size){
 		}
 	}
 }
+
+void get_pid(psinfo* ary, int size)
+{
+	int input;
+
+	getchar();
+	while(input != -1)
+	{
+		printf("what is want to kill pid?(exit : -1)");
+		scanf(" %d", &input);
+		printf("input is %d\n", input);
+
+		for(int i = 0; i < size; i++)
+		{
+			if(ary[i].pid == input)
+				ary[i].checkTokill = 1;
+
+		}
+		getchar();
+	}
+
+
+
+
+
+}
