@@ -51,8 +51,7 @@ int main(int argc, char* argv[])
 				break;
 			case 'e':
 				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
-				get_pid(wantkill, WK_SIZE);
-				get_pid(bash, bash_SIZE);
+				get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE);
 				break;
 			case 'b':
 				printf("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
@@ -183,10 +182,6 @@ void get_display(){
 	
 	find_kill(P, bash, P_SIZE, bash_SIZE);
 	
-	printf("==============================RESET ARRY==============================\n");
-	reset_arry(P, &P_SIZE);
-	print_psinfo(P, P_SIZE);
-	printf("%d\n", P_SIZE);
 	
 	printf("==============================WANTKILL PROCESS==============================\n");
 	print_psinfo(wantkill, WK_SIZE);

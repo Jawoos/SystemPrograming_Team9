@@ -30,7 +30,7 @@ void do_must_kill(psinfo* ary, int size){
 }
 
 
-void get_pid(psinfo* ary, int size)
+void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
 {
 	int input;
 
@@ -41,14 +41,31 @@ void get_pid(psinfo* ary, int size)
 		scanf(" %d", &input);
 		printf("input is %d\n", input);
 
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < size1; i++)
 		{
-			if(ary[i].pid == input){
-				printf("pid(%d) is exception\n", ary[i].pid);
-				ary[i].checkTokill = 1;
-			}
-
+			if(ary1[i].pid == input)
+			{
+				printf("pid(%d) is exception\n", ary1[i].pid);
+				ary1[i].checkTokill = 1;
+               		}
+           
 		}
+
+
+		 for(int i = 0; i < size2; i++)
+                {
+                        if(ary2[i].pid == input)
+                        {
+                                printf("pid(%d) is exception\n", ary2[i].pid);
+                                ary2[i].checkTokill = 1;
+                        }
+
+                }
+
+
+
+
+
 		getchar();
 	}
 }
