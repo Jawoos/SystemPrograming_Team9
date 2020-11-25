@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 			case 'q':
 				exit(0);
 			case 'k':
-				do_kill(wantkill, WK_SIZE);		//wnat_kill process 종료
+				do_kill(wantkill, WK_SIZE);		//want_kill process 종료
 				break;
 			case 'e':
 				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
