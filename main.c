@@ -9,6 +9,7 @@
 #include <linux/limits.h>
 #include <sys/times.h>
 #include "rd.h"
+#include "dokill.h"
 
 #define MAX 1000
 
