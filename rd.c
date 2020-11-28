@@ -42,8 +42,6 @@ void make_Time(unsigned long long x, float* rtime)
 	tickspersec = sysconf(_SC_CLK_TCK);
 	int sinceboot = get_timesinceboot(tickspersec);
  	int running = sinceboot - x;
-  	time_t rt = time(NULL) - (running / tickspersec);
-  	char buf[1024];
 
   	*rtime = running / tickspersec + (running % tickspersec) / 100.0;
 }

@@ -26,7 +26,7 @@ int WK_SIZE = 0;
 
 
 int store_pid(); //store P and bash
-int getCmdLine(char *file, char *buf); //명령어 반환(comm)
+void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
 void get_display();	//프로세스 상태 받기 및 출력
 
@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
 
 	
 }
+
 int store_pid() 
 {
 	DIR *dir;                     
@@ -98,19 +99,20 @@ int store_pid()
                                                             
 
        pid = atoi(entry->d_name);          
-       if (pid <= 0) 
-       	continue;                     
-
-	P[i++].pid = pid;
+       
+       	                    
+	if(pid > 0)
+	{
+		P[i++].pid = pid;
 	
-	sprintf(tempPath, "/proc/%d/cmdline", pid); 
-        getCmdLine(tempPath, cmdLine);
+		sprintf(tempPath, "/proc/%d/cmdline", pid); 
+        	getCmdLine(tempPath, cmdLine, sizeof(cmdLine));
         
-        if(!strcmp(cmdLine, "bash"))
-        {
-        	bash[bash_SIZE++].pid = pid;
-        }   
-	
+        	if(!strcmp(cmdLine, "bash"))
+        	{
+        		bash[bash_SIZE++].pid = pid;
+        	}   
+	}
 	
     }
     closedir(dir);
@@ -118,12 +120,12 @@ int store_pid()
     return i;
 }
 
-int getCmdLine(char *file, char *buf) 
+void getCmdLine(char *file, char *buf, int size) 
 {
     FILE *srcFp;
     srcFp = fopen(file, "r");          
 
-    memset(buf, 0, sizeof(buf));
+    memset(buf, 0, sizeof(size));
     fgets(buf, 256, srcFp);
     fclose(srcFp);
 }
