@@ -83,42 +83,42 @@ int main(int argc, char* argv[])
 
 int store_pid() 
 {
-	DIR *dir;                     
-    struct dirent *entry;       
+	DIR *dir = NULL;                     
+    struct dirent *entry = NULL;       
     struct stat fileStat;         
 
     int pid;                        
-    char cmdLine[256];
-    char tempPath[256];
+    char cmdLine[256] = "\0";
+    char tempPath[256] = "\0";
     int i = 0;
 
     dir = opendir("/proc");   
 
     while ((entry = readdir(dir)) != NULL) 
     {   
-	lstat(entry->d_name, &fileStat);          
-  
-	if(!S_ISDIR(fileStat.st_mode))         
-		continue;                                  
+	lstat(entry->d_name, &fileStat);                                           
                                                             
-
-       pid = atoi(entry->d_name);          
+	if(S_ISDIR(fileStat.st_mode))
+	{
+		pid = atoi(entry->d_name);          
        
        	                    
-	if(pid > 0)
-	{
-		P[i++].pid = pid;
+		if(pid > 0)
+		{
+			P[i++].pid = pid;
 	
-		sprintf(tempPath, "/proc/%d/cmdline", pid); 
-        	getCmdLine(tempPath, cmdLine, sizeof(cmdLine));
+			sprintf(tempPath, "/proc/%d/cmdline", pid); 
+        		getCmdLine(tempPath, cmdLine, sizeof(cmdLine));
         
-        	if(!strcmp(cmdLine, "bash"))
-        	{
-        		bash[bash_SIZE++].pid = pid;
-        	}   
+        		if(!strcmp(cmdLine, "bash"))
+        		{
+        			bash[bash_SIZE++].pid = pid;
+        		}	   
+		}
 	}
-	
     }
+
+    rewinddir(dir);
     closedir(dir);
     
     return i;
@@ -167,6 +167,11 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 
 
 void get_display(){
+	
+	reset_arry(P, &P_SIZE);
+	reset_arry(bash, &bash_SIZE);
+	reset_arry(wantkill, &WK_SIZE);
+
 	P_SIZE = store_pid();
 	
 	for(int i = 0; i < P_SIZE; i++)

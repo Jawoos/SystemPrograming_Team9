@@ -80,10 +80,12 @@ void reset_arry(psinfo* ary, int* size)
 
 void store_psinfo(psinfo* ary, int pid, int i)
 {
-	char curPid[20];
+	char curPid[20] = "\0";
 	int cnt = 0;
 	int temp;
+	char nowpwd[255];
 	
+	getcwd(nowpwd, 255); //현재 경로 저장
 	
 	FILE* input;
 
@@ -120,6 +122,7 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	read_unsigned(&(ary[i].start_time), input);
 	make_Time(ary[i].start_time, &(ary[i].runningTime));
 	
+	chdir(nowpwd);
 	rewind(input);
 	fclose(input);
 	
