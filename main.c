@@ -30,6 +30,7 @@ int getCmdLine(char *file, char *buf); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
 void get_display();	//프로세스 상태 받기 및 출력
 
+void set_time_except(int t);
 int main(int argc, char* argv[])
 {	
 	char input;
@@ -61,6 +62,9 @@ int main(int argc, char* argv[])
 				break;
 			case 't':
 				printf("get time to kill\n");		//일정시간 입력받기
+				int time;
+				scanf(" %d", &time);
+				set_time_except(time);
 				break;
 			case 'p':									//프로세스 상태 재출력
 				get_display();
@@ -189,3 +193,11 @@ void get_display(){
 }
 
 
+void set_time_except(int t){
+	for(int i = 0; i < P_SIZE; i++)
+	{
+		if(P[i].runningTime < t){
+		    P[i].checkTokill = 1;
+		}
+	}
+} 
