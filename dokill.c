@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 #include "rd.h"
 
 void do_kill(psinfo* ary, int size){
