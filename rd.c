@@ -25,7 +25,7 @@ int get_timesinceboot(long tickspersec) {
   return (sec*tickspersec)+ssec;
 }
 
-void print_timedif(char *name, unsigned long long x, float rtime, long tickspersec) 
+void print_timedif(unsigned long long x, float rtime, long tickspersec) 
 {
   int sinceboot = get_timesinceboot(tickspersec);
   int running = sinceboot - x;
@@ -33,7 +33,7 @@ void print_timedif(char *name, unsigned long long x, float rtime, long tickspers
   char buf[1024];
 
   strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
-  printf("%s: %s (%.2fs)", name, buf, rtime);
+  printf("%s (%8.2fs)", buf, rtime);
 }
 
 void make_Time(unsigned long long x, float* rtime)
@@ -52,13 +52,15 @@ void print_psinfo(psinfo* ary, int size)
 	tickspersec = sysconf(_SC_CLK_TCK);
 	
 	printf("TOTAL : %d\n", size);
+	printf(" PID				      COMMAND STATE PPID   startTime runningTime check\n");
+ 
 	for(int i = 0; i < size; i++)
 	{
-		printf("PID : %4d, COMMAND : %40s, STATE : %c, PPID : %4d, ", 
+		printf("%4d %40s %5c %4d ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
-		print_timedif("start_time", ary[i].start_time, ary[i].runningTime, tickspersec);
+		print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
 		
-		printf("check : %d\n", ary[i].checkTokill);
+		printf("   %d\n", ary[i].checkTokill);
 	}
 
 }
