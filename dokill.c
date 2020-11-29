@@ -61,11 +61,6 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
                     }
 
                 }
-
-
-
-
-
 		getchar();
 	}
 }
