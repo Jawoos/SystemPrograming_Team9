@@ -52,13 +52,13 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
            
 		}
 
-		 for(int i = 0; i < size2; i++)
-                {
-                        if(ary2[i].pid == input)
-                        {
-                                printf("pid(%d) is exception\n", ary2[i].pid);
-                                ary2[i].checkTokill = 1;
-                        }
+		for(int i = 0; i < size2; i++)
+            {
+                if(ary2[i].pid == input)
+                    {
+                        printf("pid(%d) is exception\n", ary2[i].pid);
+                        ary2[i].checkTokill = 1;
+                    }
 
                 }
 

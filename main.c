@@ -29,8 +29,9 @@ int store_pid(); //store P and bash
 void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
 void get_display();	//프로세스 상태 받기 및 출력
+void set_time_except(psinfo* ary, int size, int t);	//예외 처리할 시간 입력받기
 
-void set_time_except(int t);
+
 int main(int argc, char* argv[])
 {	
 	char input;
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
 	while(1){
 		printf("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 		scanf(" %c", &input);\
-		printf("input is %c\n", input);
+//		printf("input is %c\n", input);
 		switch(input){
 			case 'q':
 				exit(0);
@@ -64,7 +65,8 @@ int main(int argc, char* argv[])
 				printf("get time to kill\n");		//일정시간 입력받기
 				int time;
 				scanf(" %d", &time);
-				set_time_except(time);
+				set_time_except(wantkill, WK_SIZE, time);
+				set_time_except(bash, bash_SIZE, time);
 				break;
 			case 'p':									//프로세스 상태 재출력
 				get_display();
@@ -96,26 +98,26 @@ int store_pid()
 
     while ((entry = readdir(dir)) != NULL) 
     {   
-	lstat(entry->d_name, &fileStat);                                           
+		lstat(entry->d_name, &fileStat);                                           
                                                             
-	if(S_ISDIR(fileStat.st_mode))
-	{
-		pid = atoi(entry->d_name);          
+		if(S_ISDIR(fileStat.st_mode))
+		{
+			pid = atoi(entry->d_name);          
        
        	                    
-		if(pid > 0)
-		{
-			P[i++].pid = pid;
+			if(pid > 0)
+			{
+				P[i++].pid = pid;
 	
-			sprintf(tempPath, "/proc/%d/cmdline", pid); 
+				sprintf(tempPath, "/proc/%d/cmdline", pid); 
         		getCmdLine(tempPath, cmdLine, sizeof(cmdLine));
         
         		if(!strcmp(cmdLine, "bash"))
         		{
         			bash[bash_SIZE++].pid = pid;
         		}	   
+			}
 		}
-	}
     }
 
     rewinddir(dir);
@@ -165,7 +167,6 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 }
 
 
-
 void get_display(){
 	
 	reset_arry(P, &P_SIZE);
@@ -177,7 +178,8 @@ void get_display(){
 	for(int i = 0; i < P_SIZE; i++)
 	{
 		int pid = P[i].pid;
-		store_psinfo(P, pid, i);
+		store_psinfo(
+			P, pid, i);
 	}
 	
 	for(int i = 0; i < bash_SIZE; i++)
@@ -186,25 +188,27 @@ void get_display(){
 		store_psinfo(bash, pid, i);
 	}
 	
-	printf("==============================ALL PROCESS==============================\n");
+	printf("============================================================ALL PROCESS============================================================\n");
 	print_psinfo(P, P_SIZE);
-	printf("==============================BASH PROCESS==============================\n");
+	printf("============================================================BASH PROCESS============================================================\n");
 	print_psinfo(bash, bash_SIZE);
 	
 	find_kill(P, bash, P_SIZE, bash_SIZE);
 	
 	
-	printf("==============================WANTKILL PROCESS==============================\n");
+	printf("============================================================WANTKILL PROCESS============================================================\n");
 	print_psinfo(wantkill, WK_SIZE);
-	printf("================================================================================\n");
+	printf("============================================================================================================================================\n");
 }
 
 
-void set_time_except(int t){
-	for(int i = 0; i < P_SIZE; i++)
+void set_time_except(psinfo* ary, int size, int t){
+	for(int i = 0; i < size; i++)
 	{
-		if(P[i].runningTime < t){
-		    P[i].checkTokill = 1;
+		printf("time of %d is %f", ary[i].pid, ary[i].runningTime);
+		if(ary[i].runningTime < t){
+		    ary[i].checkTokill = 1;
+		    printf("pid(%d) is exception\n", ary[i].pid);
 		}
 	}
 } 
