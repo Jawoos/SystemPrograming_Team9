@@ -33,7 +33,7 @@ void print_timedif(char *name, unsigned long long x, float rtime, long tickspers
   char buf[1024];
 
   strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
-  printf("%s: %s (%.2fs)\n", name, buf, rtime);
+  printf("%s: %s (%.2fs)", name, buf, rtime);
 }
 
 void make_Time(unsigned long long x, float* rtime)
@@ -54,11 +54,11 @@ void print_psinfo(psinfo* ary, int size)
 	printf("TOTAL : %d\n", size);
 	for(int i = 0; i < size; i++)
 	{
-		printf("PID : %d, COMMAND : %s, STATE : %c, PPID : %d, ", 
+		printf("PID : %4d, COMMAND : %40s, STATE : %c, PPID : %4d, ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
 		print_timedif("start_time", ary[i].start_time, ary[i].runningTime, tickspersec);
 		
-		printf("	check : %d\n", ary[i].checkTokill);
+		printf("check : %d\n", ary[i].checkTokill);
 	}
 
 }
