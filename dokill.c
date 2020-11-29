@@ -40,7 +40,7 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
 	{
 		printf("what is want to kill pid?(exit : -1)");
 		scanf(" %d", &input);
-		printf("input is %d\n", input);
+//		printf("input is %d\n", input);
 
 		for(int i = 0; i < size1; i++)
 		{
@@ -51,7 +51,6 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
                		}
            
 		}
-
 
 		 for(int i = 0; i < size2; i++)
                 {
