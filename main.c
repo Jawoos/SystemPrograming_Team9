@@ -62,9 +62,11 @@ int main(int argc, char* argv[])
 					do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
 				break;
 			case 't':
-				printf("get time to kill\n");		//일정시간 입력받기
+				printf("enter time to not kill(exit : -1)\n");		//일정시간 입력받기
 				int time;
 				scanf(" %d", &time);
+				if (time == -1)
+					break;
 				set_time_except(wantkill, WK_SIZE, time);
 				set_time_except(bash, bash_SIZE, time);
 				break;
@@ -205,7 +207,6 @@ void get_display(){
 void set_time_except(psinfo* ary, int size, int t){
 	for(int i = 0; i < size; i++)
 	{
-		printf("time of %d is %f", ary[i].pid, ary[i].runningTime);
 		if(ary[i].runningTime < t){
 		    ary[i].checkTokill = 1;
 		    printf("pid(%d) is exception\n", ary[i].pid);
