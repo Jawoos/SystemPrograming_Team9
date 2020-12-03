@@ -114,7 +114,9 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	read_char(&(ary[i].state), input);
 	read_one(&(ary[i].ppid), input);
 	ary[i].checkTokill = 0;
-		
+	if(ary[i].pid == getpid() || ary[i].pid == getppid()) // current process and it's bash
+		ary[i].checkTokill = 1;
+
 	while(cnt < 17)
 	{
 		read_one(&temp, input);

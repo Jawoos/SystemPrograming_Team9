@@ -163,6 +163,8 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 				wantkill[WK_SIZE].state = ary1[j].state;
 				wantkill[WK_SIZE].ppid = ary1[j].ppid;
 				wantkill[WK_SIZE].runningTime = ary1[j].runningTime;
+				if(wantkill[WK_SIZE].pid == getpid()) // current process and it's bash
+						wantkill[WK_SIZE].checkTokill = 1;
 				wantkill[WK_SIZE++].start_time = ary1[j].start_time;
 			
 			}
