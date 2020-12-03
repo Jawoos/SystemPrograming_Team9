@@ -64,3 +64,25 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
 		getchar();
 	}
 }
+
+void store_CK(psinfo* ary, int size, int* CK, int* cksize) //store checkTokill's pid
+{
+	for(int i = 0;  i < size; i++)
+	{
+		if(ary[i].checkTokill == 1)
+			CK[(*cksize)++] = ary[i].pid;
+	}
+}
+
+void set_CK(psinfo* ary, int size, int* CK, int cksize) //set checkTokill values
+{
+	for(int i = 0;  i < size; i++)
+	{
+		for(int j = 0; j < cksize; j++)
+		{
+			if(CK[j] == ary[i].pid)
+				ary[i].checkTokill = 1;
+		}
+	}
+
+}

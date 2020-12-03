@@ -24,6 +24,8 @@ int bash_SIZE = 0;
 psinfo wantkill[MAX]; //죽이고 싶은 프로세스 저장
 int WK_SIZE = 0; 
 
+int CK[MAX];  //checkTokill store ary
+int CK_SIZE = 0; 
 
 int store_pid(); //store P and bash
 void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
@@ -54,6 +56,9 @@ int main(int argc, char* argv[])
 			case 'e':
 				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
 				get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE);
+				store_CK(wantkill, WK_SIZE, CK, &CK_SIZE);
+				store_CK(bash, bash_SIZE, CK, &CK_SIZE);
+				set_CK(P, P_SIZE, CK, CK_SIZE);
 				break;
 			case 'b':
 				printf("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
@@ -189,6 +194,10 @@ void get_display(){
 		int pid = bash[i].pid;
 		store_psinfo(bash, pid, i);
 	}
+
+	set_CK(P, P_SIZE, CK, CK_SIZE);
+	set_CK(bash, bash_SIZE, CK, CK_SIZE);
+	set_CK(wantkill, WK_SIZE, CK, CK_SIZE);
 	
 	printf("============================================================ALL PROCESS============================================================\n");
 	print_psinfo(P, P_SIZE);
