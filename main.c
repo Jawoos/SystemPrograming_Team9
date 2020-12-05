@@ -12,7 +12,7 @@
 #include "rd.h"
 #include "dokill.h"
 #define MAX 1000
-
+#define BLANK "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
 
 
 psinfo P[MAX]; //proc에 있는 모든 프로세스 저장
@@ -33,15 +33,35 @@ int curindex = 0;
 int store_pid(); //store P and bash
 void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
-void get_display();	//프로세스 출력
-void get_value(); //프로세스 상태 받기
+void get_display();	//프로세스 상태 받기 및 출력
+void get_value();
 void set_time_except(psinfo* ary, int size, int t);	//예외 처리할 시간 입력받기
-    
+void set_blank()
+{	
+	int i;
+	for(i = 3; i > 0; i--)
+	{
+		move(lines - i, 0);
+		printw(BLANK);
+		refresh();
+	}
+}
+   
+void blank_all()
+{
+	for(int i = 2; i < lines - 6; i++)
+	{
+		move(i, 0);
+		printw(BLANK);
+		refresh();
+	}
+}
 
 int main(int argc, char* argv[])
 {	
-char input;
+	char input;
 	char input_temp;
+	
 	
 	initscr();
 	clear();
@@ -52,45 +72,76 @@ char input;
 	
 	get_value();
 	get_display(lines);
-	getchar();	
 	
 	while(1){
-		printf("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
-		scanf(" %c", &input);\
+		set_blank();
+		move(lines - 3, 0);
+		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
+		refresh();
+		input = getch();
+		refresh();
+		sleep(1);
 //		printf("input is %c\n", input);
 		switch(input){
 			case 'q':
-				exit(0);
+				move(lines - 2, 0);
+				printw("Bye Bye.");
+				refresh();
+				sleep(1);
+				endwin();
+				return 0;
 			case 'k':
+				set_blank();
+				move(lines - 3, 0);
 				do_kill(wantkill, WK_SIZE);		//want_kill process 종료
 				break;
 			case 'e':
-				printf("enter 예외 pid\n");		//예외 프로세서 pid 입력받기
-				get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE);
+				set_blank();
+				move(lines - 3, 0);
+				printw("enter exception pid");		//예외 프로세서 pid 입력받기
+				refresh();
+				get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE, lines);
+				
 				store_CK(wantkill, WK_SIZE, CK, &CK_SIZE);
 				store_CK(bash, bash_SIZE, CK, &CK_SIZE);
 				set_CK(P, P_SIZE, CK, CK_SIZE);
 				break;
 			case 'b':
-				printf("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
-				scanf(" %c", &input_temp);
+				set_blank();
+				move(lines - 3, 0);
+				printw("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
+				refresh();
+				scanw("%c", &input_temp);
+				refresh();
+				move(lines - 2, 0);
 				if(input_temp == 'Y' || input_temp == 'y')
 					do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
 				break;
 			case 't':
-				printf("enter time to not kill(exit : -1)\n");		//일정시간 입력받기
+				set_blank();
+				move(lines - 3, 0);
+				printw("enter time to not kill(exit : -1)");		//일정시간 입력받기
+				refresh();
 				int time;
-				scanf(" %d", &time);
+				scanw("%d", &time);
+				refresh();
 				if (time == -1)
 					break;
+				
 				set_time_except(wantkill, WK_SIZE, time);
 				set_time_except(bash, bash_SIZE, time);
 				break;
 			case 'p':									//프로세스 상태 재출력
+				blank_all();
+				get_value();
 				get_display();
 				break;
 			default:
-				printf("you type wrong option please type it right.\n");
+				set_blank();
+				move(lines - 3, 0);
+				printw("you type wrong option please type it right.");
+				refresh();
+				sleep(1);
 				break;
 		}
 	}
@@ -186,11 +237,13 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 
 
 void get_display(){
+	
 	move(2, 0);
 	printw(" PID				      COMMAND STATE PPID   startTime runningTime check");
 	refresh();
 	
-	curindex = print_psinfo(P, P_SIZE, curindex, lines);	
+	curindex = print_psinfo(P, P_SIZE, curindex, lines);
+
 }
 
 void get_value()
@@ -200,33 +253,39 @@ void get_value()
 	reset_arry(wantkill, &WK_SIZE);
 
 	P_SIZE = store_pid();
-
+	
 	for(int i = 0; i < P_SIZE; i++)
 	{
 		int pid = P[i].pid;
-		store_psinfo(
-			P, pid, i);
+		store_psinfo(P, pid, i);
 	}
-
+	
+	
 	for(int i = 0; i < bash_SIZE; i++)
 	{
 		int pid = bash[i].pid;
 		store_psinfo(bash, pid, i);
 	}
-
+	
+	find_kill(P, bash, P_SIZE, bash_SIZE);
 	set_CK(P, P_SIZE, CK, CK_SIZE);
 	set_CK(bash, bash_SIZE, CK, CK_SIZE);
 	set_CK(wantkill, WK_SIZE, CK, CK_SIZE);
 
 }
 
-
 void set_time_except(psinfo* ary, int size, int t){
 	for(int i = 0; i < size; i++)
 	{
 		if(ary[i].runningTime < t){
-		    ary[i].checkTokill = 1;
-		    printf("pid(%d) is exception\n", ary[i].pid);
+			move(lines - 2, 0);
+			printw(BLANK);
+			move(lines - 2, 0);
+		    	ary[i].checkTokill = 1;
+		    	printw("pid(%d) is exception", ary[i].pid);
+		    	refresh();
+		    	sleep(1); //1초마다 예외된 값 출력
+		   
 		}
 	}
 } 

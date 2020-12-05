@@ -48,7 +48,7 @@ void make_Time(unsigned long long x, float* rtime)
   	*rtime = running / tickspersec + (running % tickspersec) / 100.0;
 }
 
-void print_psinfo(psinfo* ary, int size)
+int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 {
 	long tickspersec;
 	int i = 0;
@@ -59,8 +59,10 @@ void print_psinfo(psinfo* ary, int size)
 	printw("TOTAL : %d", size);
 	refresh();
 	
-	for(int i = 0; i < lines - 5; i++)
+	for(int i = 0; i < lines - 6; i++)
 	{
+		if(i >= size)
+			break;
 		move(i - curindex + 3, 0);
 		printw("%4d %40s %5c %4d ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
@@ -70,7 +72,7 @@ void print_psinfo(psinfo* ary, int size)
 		printw("   %d\n", ary[i].checkTokill);
 		refresh();
 	}
-	return i; 
+	return i;
 
 }
 

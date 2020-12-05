@@ -2,66 +2,93 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include "rd.h"
 
+#define BLANK "\t\t\t\t\t\t\t\t\t\t        "
+
 void do_kill(psinfo* ary, int size){
-	if(size == 0)
-		printf("There is nothing available process to kill\n");
+	int total = 0;
+	if(size == 1)
+	{
+		printw("There is nothing available process to kill");
+		refresh();
+	}
 	for(int i = 0; i < size; i++){
-		printf("print check of pid(%d) : %d and my pid is %d\n", ary[i].pid, ary[i].checkTokill, getpid());
+		//printf("print check of pid(%d) : %d and my pid is %d\n", ary[i].pid, ary[i].checkTokill, getpid());
 		if(ary[i].checkTokill == 0){
-			printf("processor (%d) will be killed\n", ary[i].pid);
+			//printf("processor (%d) will be killed\n", ary[i].pid);
+			total++;
 			kill(ary[i].pid, SIGINT);
 		}
 	}
+	printw("total kill: %d", total);
+	refresh();
+	sleep(2);
 }
 
 
 void do_must_kill(psinfo* ary, int size){
-	if(size == 0)
-		printf("There is nothing available process to kill\n");
+	int total = 0;
+	if(size == 1)
+	{
+		printw("There is nothing available process to kill");
+		refresh();
+	}
 	for(int i = 0; i < size; i++){
-		printf("print check of pid(%d) : %d and my pid is %d ppid is %d\n", ary[i].pid, ary[i].checkTokill, getpid(), getppid());
+		//printf("print check of pid(%d) : %d and my pid is %d ppid is %d\n", ary[i].pid, ary[i].checkTokill, getpid(), getppid());
 		if(ary[i].checkTokill == 0){
-			printf("processor (%d) will be killed\n", ary[i].pid);
+			//printf("processor (%d) will be killed\n", ary[i].pid);
 		//	sleep(60);
+			total++;
 			kill(ary[i].pid, SIGKILL);
 		}
 	}
+	printw("total kill: %d", total);
+	refresh();
+	sleep(2);
 }
 
 
-void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2)
+void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 {
 	int input;
-
-	getchar();
+	int i;
+	
 	while(input != -1)
 	{
-		printf("what is want to kill pid?(exit : -1)");
-		scanf(" %d", &input);
-//		printf("input is %d\n", input);
-
-		for(int i = 0; i < size1; i++)
+		move(lines - 2, 0);
+		printw("what is want to kill pid?(exit : -1)");
+		scanw("%d", &input);
+		refresh();
+		move(lines -1, 0);
+		sleep(1);
+		addstr(BLANK);
+		refresh();
+		
+		for(i = 0; i < size1; i++) 
 		{
 			if(ary1[i].pid == input)
 			{
-				printf("pid(%d) is exception\n", ary1[i].pid);
+				move(lines -1, 0);
+				printw("pid(%d) is exception", ary1[i].pid);
+				refresh();
 				ary1[i].checkTokill = 1;
-               		}
-           
+               	}
 		}
 
-		for(int i = 0; i < size2; i++)
-            {
-                if(ary2[i].pid == input)
-                    {
-                        printf("pid(%d) is exception\n", ary2[i].pid);
-                        ary2[i].checkTokill = 1;
-                    }
+		for(i = 0; i < size2; i++)
+            	{
+                	if(ary2[i].pid == input)
+                   	 {
+                   	 	move(lines -1, 0);
+                       	printw("pid(%d) is exception", ary2[i].pid);
+                       	refresh();
+                        	ary2[i].checkTokill = 1;
+                    	}
 
                 }
-		getchar();
+               
 	}
 }
 
