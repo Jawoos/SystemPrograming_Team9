@@ -9,6 +9,8 @@
 #include <linux/limits.h>
 #include <sys/times.h>
 #include <ncurses.h>
+#include<sys/time.h>
+#include<signal.h>
 #include "rd.h"
 #include "dokill.h"
 #define MAX 1000
@@ -57,11 +59,34 @@ void blank_all()
 	}
 }
 
+int set_ticker(int n_msecs)
+{
+	struct itimerval new_timeset;
+	long n_sec, n_usecs;
+
+	n_sec = n_msecs / 1000;
+	n_usecs = (n_msecs % 1000) *1000L;
+
+	new_timeset.it_interval.tv_sec = n_sec;
+	new_timeset.it_interval.tv_usec = n_usecs;
+	new_timeset.it_value.tv_sec = n_sec;
+	new_timeset.it_value.tv_usec = n_usecs;
+
+	return setitimer(ITIMER_REAL, &new_timeset, NULL);
+}
+
+void update_ps(int num)
+{
+	get_value();
+	get_display(lines);
+
+}
+
 int main(int argc, char* argv[])
 {	
 	char input;
 	char input_temp;
-	
+	int delay = 5000; //5초마다 ps 갱신	
 	
 	initscr();
 	clear();
@@ -74,6 +99,8 @@ int main(int argc, char* argv[])
 	get_display(lines);
 	
 	while(1){
+		signal(SIGALRM, update_ps);
+		set_ticker(delay);
 		set_blank();
 		move(lines - 3, 0);
 		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
