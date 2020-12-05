@@ -82,8 +82,11 @@ void update_ps(int num)
 {
 	get_value();
 	get_display();
-	move(lines - 3, strlen("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)"));	
-
+	set_blank();
+	move(lines - 3, 0);
+	printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
+	refresh();
+	signal(SIGALRM, update_ps);
 }
 
 int main(int argc, char* argv[])
