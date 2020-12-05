@@ -205,6 +205,8 @@ int main(int argc, char* argv[])
 					set_blank();
 					move(lines - 3, 0);
 					printw("LEFT");
+					printw("%d %d %d", P_SIZE, bash_SIZE, WK_SIZE);
+					refresh();
 					blank_all();
 					refresh();
 					sleep(2);
@@ -215,6 +217,8 @@ int main(int argc, char* argv[])
 					set_blank();
 					move(lines - 3, 0);
 					printw("RIGHT");
+					printw("%d %d %d", P_SIZE, bash_SIZE, WK_SIZE);
+					refresh();
 					blank_all();
 					refresh();
 					sleep(2);
