@@ -4,12 +4,12 @@ OBJS = main.o rd.o dokill.o
 
 CFLAGS = -Wall
 LDFLAGS = -lc 
-AA = -lcurses
+LDLIBS = -lcurses
 
 all : $(TARGET)
 
 $(TARGET) : $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(AA)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 .c.o :
 	$(CC) $(CFLAGS) -c -o $@ $<
