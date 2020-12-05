@@ -194,16 +194,12 @@ int main(int argc, char* argv[])
 					printw("DOWN");
 					refresh();
 					sleep(2);
-					
-
 					if ((map_num % 3) == 0 && start < P_SIZE - lines + 6)
 						start++;
 					else if ((map_num % 3) == 1 && start < P_SIZE - lines + 6)
 						start++;
 					else if ((map_num % 3) == 2 && start < P_SIZE - lines + 6)
 						start++;
-
-
 					break;
 				case 68:	//left
 					set_blank();
