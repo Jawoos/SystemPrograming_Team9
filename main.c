@@ -84,7 +84,7 @@ void update_ps(int num)
 
 int main(int argc, char* argv[])
 {	
-	char input;
+	int input;
 	char input_temp;
 	int delay = 5000; //5초마다 ps 갱신	
 	
@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 	refresh();
 	
 	get_value();
-	get_display(lines);
+	get_display();
 	
 	while(1){
 		signal(SIGALRM, update_ps);
@@ -105,76 +105,124 @@ int main(int argc, char* argv[])
 		move(lines - 3, 0);
 		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 		refresh();
-		input = getch();
+		
 		refresh();
 		sleep(1);
-//		printf("input is %c\n", input);
-		switch(input){
-			case 'q':
-				move(lines - 2, 0);
-				printw("Bye Bye.");
-				refresh();
-				sleep(1);
-				endwin();
-				return 0;
-			case 'k':
-				set_blank();
-				move(lines - 3, 0);
-				do_kill(wantkill, WK_SIZE);		//want_kill process 종료
-				break;
-			case 'e':
-				set_blank();
-				move(lines - 3, 0);
-				printw("enter exception pid");		//예외 프로세서 pid 입력받기
-				refresh();
-				get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE, lines);
-				
-				store_CK(wantkill, WK_SIZE, CK, &CK_SIZE);
-				store_CK(bash, bash_SIZE, CK, &CK_SIZE);
-				set_CK(P, P_SIZE, CK, CK_SIZE);
-				break;
-			case 'b':
-				set_blank();
-				move(lines - 3, 0);
-				printw("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
-				refresh();
-				scanw("%c", &input_temp);
-				refresh();
-				move(lines - 2, 0);
-				if(input_temp == 'Y' || input_temp == 'y')
-					do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
-				break;
-			case 't':
-				set_blank();
-				move(lines - 3, 0);
-				printw("enter time to not kill(exit : -1)");		//일정시간 입력받기
-				refresh();
-				int time;
-				scanw("%d", &time);
-				refresh();
-				if (time == -1)
+		input = getch();
+	
+
+		set_blank();
+		move(lines - 3, 0);
+		printw("input is %d", input);
+		refresh();
+		sleep(1);
+		// if (input == 27) {
+		// 	printf("ESC\n");
+		// 	break;
+		// }
+		if (input != 27) {
+
+			 set_blank();
+			move(lines - 3, 0);
+			printw("not 27");
+			refresh();
+
+			switch(input){
+				case 113:	//q
+					move(lines - 2, 0);
+					printw("Bye Bye.");
+					refresh();
+					sleep(1);
+					endwin();
+					return 0;
+				case 107:	//k
+					set_blank();
+					move(lines - 3, 0);
+					do_kill(wantkill, WK_SIZE);		//want_kill process 종료
 					break;
+				case 101:	//e
+					set_blank();
+					move(lines - 3, 0);
+					printw("enter exception pid");		//예외 프로세서 pid 입력받기
+					refresh();
+					get_pid(wantkill,  WK_SIZE, bash,  bash_SIZE, lines);
 				
-				set_time_except(wantkill, WK_SIZE, time);
-				set_time_except(bash, bash_SIZE, time);
-				break;
-			case 'p':									//프로세스 상태 재출력
-				blank_all();
-				get_value();
-				get_display();
-				break;
-			default:
-				set_blank();
-				move(lines - 3, 0);
-				printw("you type wrong option please type it right.");
-				refresh();
-				sleep(1);
-				break;
-		}
+					store_CK(wantkill, WK_SIZE, CK, &CK_SIZE);
+					store_CK(bash, bash_SIZE, CK, &CK_SIZE);
+					set_CK(P, P_SIZE, CK, CK_SIZE);
+					break;
+				case 98:	//b
+					set_blank();
+					move(lines - 3, 0);
+					printw("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
+					refresh();
+					scanw("%c", &input_temp);
+					refresh();
+					move(lines - 2, 0);
+					if(input_temp == 'Y' || input_temp == 'y')
+						do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
+					break;
+				case 116:	//t
+					set_blank();
+					move(lines - 3, 0);
+					printw("enter time to not kill(exit : -1)");		//일정시간 입력받기
+					refresh();
+					int time;
+					scanw("%d", &time);
+					refresh();
+					if (time == -1)
+						break;
+					set_time_except(wantkill, WK_SIZE, time);
+					set_time_except(bash, bash_SIZE, time);
+					break;
+				case 112:									//프로세스 상태 재출력 p 
+					blank_all();
+					get_value();
+					get_display();
+					break;
+				default:
+					set_blank();
+					move(lines - 3, 0);
+					printw("you type wrong option please type it right.");
+					refresh();
+					sleep(1);
+					break;
+				}
+		} else {
+			set_blank();
+			move(lines - 3, 0);
+			printw("input is 27");
+			refresh();
+			input = getch();
+			switch (input) {
+				case 72:
+				 	set_blank();
+					move(lines - 3, 0);
+					printw("UP");
+					refresh();
+					sleep(2);
+					break;
+				case 80:
+					set_blank();
+					move(lines - 3, 0);
+					printw("DOWN");
+					refresh();
+					break;
+				case 75:
+					set_blank();
+					move(lines - 3, 0);
+					printw("LEFT");
+					refresh();
+					break;
+				case 77:
+					set_blank();
+					move(lines - 3, 0);
+					printw("RIGHT");
+					refresh();
+					break;
+			}
+		}	
 	}
-	
-	
-    	
 }
 
 int store_pid() 
@@ -238,11 +286,9 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 	for(int i = 0;  i < size2; i++)
 	{
 		pid = ary2[i].pid;
-		
 		for(int j = 0; j < size1; j++)
 		{
 			ppid = ary1[j].ppid;
-			
 			if(pid == ppid)
 			{
 				wantkill[WK_SIZE].pid = ary1[j].pid;
@@ -258,8 +304,6 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 		}
 	
 	}
-	
-	
 }
 
 
