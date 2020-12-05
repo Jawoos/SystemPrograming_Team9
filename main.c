@@ -82,6 +82,7 @@ void update_ps(int num)
 {
 	get_value();
 	get_display();
+	move(lines - 3, strlen("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)"));	
 
 }
 
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
 {	
 	int input;
 	char input_temp;
-	int delay = 500; //5초마다 ps 갱신	
+	int delay = 500; //0.5초마다 ps 갱신	
 	
 	initscr();
 	clear();
@@ -180,36 +181,34 @@ int main(int argc, char* argv[])
 			input = getch();
 			switch (input) {
 				case 65:	//up
-				 	set_blank();
-					move(lines - 3, 0);
-					printw("UP");
-					refresh();
-					sleep(2);
+				 // 	set_blank();
+					// move(lines - 3, 0);
+					// printw("UP");
+					// refresh();
+					// sleep(2);
 					if (start > 0)
 						start--;
 					break;
 				case 66:	//down
-					set_blank();
-					move(lines - 3, 0);
-					printw("DOWN");
-					refresh();
-					sleep(2);
+					// set_blank();
+					// move(lines - 3, 0);
+					// printw("DOWN");
+					// refresh();
+					// sleep(2);
 					if ((map_num % 3) == 0 && start < P_SIZE - lines + 6)
 						start++;
-					else if ((map_num % 3) == 1 && start < P_SIZE - lines + 6)
+					else if ((map_num % 3) == 1 && start < bash_SIZE - lines + 6)
 						start++;
-					else if ((map_num % 3) == 2 && start < P_SIZE - lines + 6)
+					else if ((map_num % 3) == 2 && start < WK_SIZE - lines + 6)
 						start++;
 					break;
 				case 68:	//left
-					set_blank();
-					move(lines - 3, 0);
-					printw("LEFT");
-					printw("%d %d %d", P_SIZE, bash_SIZE, WK_SIZE);
-					refresh();
-					blank_all();
-					refresh();
-					sleep(2);
+					// set_blank();
+					// move(lines - 3, 0);
+					// printw("LEFT");
+					// blank_all();
+					// refresh();
+					// sleep(2);
 					map_num--;
 					start = 0;
 					break;
@@ -217,8 +216,6 @@ int main(int argc, char* argv[])
 					set_blank();
 					move(lines - 3, 0);
 					printw("RIGHT");
-					printw("%d %d %d", P_SIZE, bash_SIZE, WK_SIZE);
-					refresh();
 					blank_all();
 					refresh();
 					sleep(2);
@@ -232,7 +229,7 @@ int main(int argc, char* argv[])
 					sleep(1);
 					break;
 			}
-		}	
+		}
 	}
 }
 
@@ -310,7 +307,7 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 				if(wantkill[WK_SIZE].pid == getpid()) // current process and it's bash
 						wantkill[WK_SIZE].checkTokill = 1;
 				wantkill[WK_SIZE++].start_time = ary1[j].start_time;
-			
+				fprintf(stderr, "%d\n", WK_SIZE);
 			}
 		}
 	

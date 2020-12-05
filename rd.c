@@ -13,6 +13,7 @@
 
 
 extern int start;
+extern int map_num;
 
 void read_one(int *x, FILE* input) { fscanf(input, "%d ", x); }
 void read_unsigned(unsigned long long *x, FILE* input) { fscanf(input, "%llu ", x); }
@@ -55,25 +56,38 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 {
 	long tickspersec;
 	int i = 0;
+	int j = 0;
 	
 	tickspersec = sysconf(_SC_CLK_TCK);
 	
 	move(1, 0);
-	printw("TOTAL : %d", size);
+	if ((map_num % 3) == 0)
+		printw("TOTAL : %d\t\tAll Process Table  ", size);
+	else if ((map_num % 3) == 1)
+		printw("TOTAL : %d\t\tBash Process Table  ", size);
+	else if ((map_num % 3) == 2)
+		printw("TOTAL : %d\t\tUser Process Table  ", size);
 	refresh();
 	
-	for(int i = start; i < lines - 6; i++)
+	
+
+	for(i = start, j = 0; j < lines - 6; i++, j++)
 	{
-		if(i >= size)
-			break;
-		move(i - curindex + 3, 0);
-		printw("%4d %40s %5c %4d ", 
-					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
-		refresh();
-		print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
-		refresh();
-		printw("   %d\n", ary[i].checkTokill);
-		refresh();
+
+		if(i >= size){
+			move(j + 3, 0);
+			printw("\t\t\t\t\t\t\t\t\t\t\t\t");
+			refresh();
+		}
+		else{
+			move(j + 3, 0);
+			printw("%4d %40s %5c %4d ", ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
+			refresh();
+			print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
+			refresh();
+			printw("   %d\n", ary[i].checkTokill);
+			refresh();
+		}
 	}
 	return i;
 
