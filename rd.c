@@ -52,7 +52,7 @@ void print_psinfo(psinfo* ary, int size)
 	tickspersec = sysconf(_SC_CLK_TCK);
 	
 	printf("TOTAL : %d\n", size);
-	printf(" PID				      COMMAND STATE PPID   startTime runningTime check\n");
+	printf("\033[7;37m PID                                  COMMAND STATE PPID   startTime runningTime check\n\033[0m");
  
 	for(int i = 0; i < size; i++)
 	{
@@ -60,7 +60,7 @@ void print_psinfo(psinfo* ary, int size)
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
 		print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
 		
-		printf("   %d\n", ary[i].checkTokill);
+		printf("     %d\n", ary[i].checkTokill);
 	}
 
 }

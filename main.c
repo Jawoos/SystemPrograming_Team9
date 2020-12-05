@@ -8,9 +8,9 @@
 #include <time.h>
 #include <linux/limits.h>
 #include <sys/times.h>
+#include <ncurses.h>
 #include "rd.h"
 #include "dokill.h"
-
 #define MAX 1000
 
 
@@ -32,17 +32,19 @@ void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
 void get_display();	//프로세스 상태 받기 및 출력
 void set_time_except(psinfo* ary, int size, int t);	//예외 처리할 시간 입력받기
-
+    
 
 int main(int argc, char* argv[])
 {	
 	char input;
 	char input_temp;
-	
+	int lines, cols; 
+	initscr();
+	getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
 	printf("this terminal pid : %d\n", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
 	
 	get_display();
-
+	
 	while(1){
 		printf("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 		scanf(" %c", &input);\
@@ -85,9 +87,7 @@ int main(int argc, char* argv[])
 	}
 	
 	
-	
-
-	
+    	
 }
 
 int store_pid() 
@@ -203,15 +203,15 @@ void get_display(){
 	
 	printf("============================================================ALL PROCESS============================================================\n");
 	print_psinfo(P, P_SIZE);
-	printf("============================================================BASH PROCESS============================================================\n");
+	printf("============================================================BASH PROCESS===========================================================\n");
 	print_psinfo(bash, bash_SIZE);
 	
 	find_kill(P, bash, P_SIZE, bash_SIZE);
 	
 	
-	printf("============================================================WANTKILL PROCESS============================================================\n");
+	printf("============================================================WANTKILL PROCESS=======================================================\n");
 	print_psinfo(wantkill, WK_SIZE);
-	printf("============================================================================================================================================\n");
+	printf("===================================================================================================================================\n");
 }
 
 
