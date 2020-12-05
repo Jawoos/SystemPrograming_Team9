@@ -31,6 +31,7 @@ int CK_SIZE = 0;
 
 int lines, cols;
 int curindex = 0;
+int strsize = strlen("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 
 int start = 0;	//for문 시작 지점 -> 위아래 스크롤 구현
 int map_num = 0;	//좌우 이동
@@ -82,22 +83,34 @@ void update_ps(int num)
 {	
 	get_value();
 	get_display();
-
+	move(lines - 3, strsize);
+	refresh();
 }
 
 int main(int argc, char* argv[])
 {	
+	
 	int input;
 	char input_temp;
 	// int delay = 500; //0.5초마다 ps 갱신	
 	int delay = 500; //0.5초마다 ps 갱신	
 	
 	initscr();
+	start_color();
+	init_pair(1, COLOR_WHITE, COLOR_BLACK);		//default
+    init_pair(2, COLOR_BLACK, COLOR_YELLOW);	//this pid
+    init_pair(3, COLOR_WHITE, COLOR_MAGENTA);	//TOTAL
+    init_pair(4, COLOR_WHITE, COLOR_BLUE);		//COMMAND
+
+
 	clear();
 	getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
 	move(0, 0);
+	attron(COLOR_PAIR(4));
 	printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
+	attron(COLOR_PAIR(1));
 	refresh();
+
 	
 //	get_value();
 //	get_display();
@@ -128,6 +141,7 @@ int main(int argc, char* argv[])
 					do_kill(wantkill, WK_SIZE);		//want_kill process 종료
 					break;
 				case 101:	//e
+					echo();
 					set_blank();
 					move(lines - 3, 0);
 					printw("enter exception pid");		//예외 프로세서 pid 입력받기
@@ -150,6 +164,7 @@ int main(int argc, char* argv[])
 						do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
 					break;
 				case 116:	//t
+					echo();
 					set_blank();
 					move(lines - 3, 0);
 					printw("enter time to not kill(exit : -1)");		//일정시간 입력받기
@@ -180,16 +195,18 @@ int main(int argc, char* argv[])
 			input = getch();
 			switch (input) {
 				case 65:	//up
-					if (start > 0)
-						start--;
+					if (start > 10)
+						start -= 10;
+					else
+						start = 0;
 					break;
 				case 66:	//down
-					if ((map_num % 3) == 0 && start < P_SIZE - lines + 6)
-						start++;
-					else if ((map_num % 3) == 1 && start < bash_SIZE - lines + 6)
-						start++;
-					else if ((map_num % 3) == 2 && start < WK_SIZE - lines + 6)
-						start++;
+					if ((map_num % 3) == 0 && start < P_SIZE - lines + 15)
+						start += 10;
+					else if ((map_num % 3) == 1 && start < bash_SIZE - lines + 15)
+						start += 10;
+					else if ((map_num % 3) == 2 && start < WK_SIZE - lines + 15)
+						start += 10;
 					break;
 				case 68:	//left
 					map_num--;
@@ -296,8 +313,29 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 
 void get_display(){
 	move(2, 0);
+	attron(COLOR_PAIR(2));
 	printw(" PID				      COMMAND STATE PPID   startTime runningTime check");
+	
 	refresh();
+	move(1, 0);
+	if ((map_num % 3) == 0){
+		attron(COLOR_PAIR(3));
+		printw("TOTAL : %d\t\tAll Process Table  ", P_SIZE);
+		refresh();
+	}
+	else if ((map_num % 3) == 1){
+		attron(COLOR_PAIR(3));
+		printw("TOTAL : %d\t\tBash Process Table  ", bash_SIZE);
+		refresh();
+	}
+	else if ((map_num % 3) == 2){
+		attron(COLOR_PAIR(3));
+		printw("TOTAL : %d\t\tUser Process Table  ", WK_SIZE);
+		refresh();
+	}
+	refresh();
+	attron(COLOR_PAIR(1));
+
 	if ((map_num % 3) == 0)
 		curindex = print_psinfo(P, P_SIZE, curindex, lines);
 	else if ((map_num % 3) == 1)

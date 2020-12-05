@@ -60,17 +60,6 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 	
 	tickspersec = sysconf(_SC_CLK_TCK);
 	
-	move(1, 0);
-	if ((map_num % 3) == 0)
-		printw("TOTAL : %d\t\tAll Process Table  ", size);
-	else if ((map_num % 3) == 1)
-		printw("TOTAL : %d\t\tBash Process Table  ", size);
-	else if ((map_num % 3) == 2)
-		printw("TOTAL : %d\t\tUser Process Table  ", size);
-	refresh();
-	
-	
-
 	for(i = start, j = 0; j < lines - 6; i++, j++)
 	{
 
