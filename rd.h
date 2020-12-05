@@ -23,8 +23,7 @@ typedef struct psinfo
 }psinfo;
 
 
-
-void print_psinfo(psinfo* ary, int size); //출력
+int print_psinfo(psinfo* ary, int size, int curindex, int lines); //출력
 void reset_arry(psinfo* ary, int* size); //reset arry
 void store_psinfo(psinfo* ary, int, int); //pid를 통한 ps 정보 저장
 

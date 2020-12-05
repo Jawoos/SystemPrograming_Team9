@@ -8,6 +8,7 @@
 #include <time.h>
 #include <linux/limits.h>
 #include <sys/times.h>
+#include <ncurses.h>
 #include "rd.h"
 
 void read_one(int *x, FILE* input) { fscanf(input, "%d ", x); }
@@ -33,7 +34,8 @@ void print_timedif(unsigned long long x, float rtime, long tickspersec)
   char buf[1024];
 
   strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
-  printf("%s (%8.2fs)", buf, rtime);
+  printw("%s (%8.2fs)", buf, rtime);
+  refresh();
 }
 
 void make_Time(unsigned long long x, float* rtime)
@@ -49,19 +51,26 @@ void make_Time(unsigned long long x, float* rtime)
 void print_psinfo(psinfo* ary, int size)
 {
 	long tickspersec;
+	int i = 0;
+	
 	tickspersec = sysconf(_SC_CLK_TCK);
 	
-	printf("TOTAL : %d\n", size);
-	printf("\033[7;37m PID                                  COMMAND STATE PPID   startTime runningTime check\n\033[0m");
- 
-	for(int i = 0; i < size; i++)
+	move(1, 0);
+	printw("TOTAL : %d", size);
+	refresh();
+	
+	for(int i = 0; i < lines - 5; i++)
 	{
-		printf("%4d %40s %5c %4d ", 
+		move(i - curindex + 3, 0);
+		printw("%4d %40s %5c %4d ", 
 					ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
+		refresh();
 		print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
-		
-		printf("     %d\n", ary[i].checkTokill);
+		refresh();
+		printw("   %d\n", ary[i].checkTokill);
+		refresh();
 	}
+	return i; 
 
 }
 
