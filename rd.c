@@ -11,6 +11,9 @@
 #include <ncurses.h>
 #include "rd.h"
 
+
+extern int start;
+
 void read_one(int *x, FILE* input) { fscanf(input, "%d ", x); }
 void read_unsigned(unsigned long long *x, FILE* input) { fscanf(input, "%llu ", x); }
 void read_str(char *x, FILE* input) {  fscanf(input, "%s ", x);}
@@ -59,7 +62,7 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 	printw("TOTAL : %d", size);
 	refresh();
 	
-	for(int i = 0; i < lines - 6; i++)
+	for(int i = start; i < lines - 6; i++)
 	{
 		if(i >= size)
 			break;

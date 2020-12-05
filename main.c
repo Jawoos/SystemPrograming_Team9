@@ -32,6 +32,9 @@ int CK_SIZE = 0;
 int lines, cols;
 int curindex = 0;
 
+int start = 0;	//for문 시작 지점 -> 위아래 스크롤 구현
+int map_num = 0;	//좌우 이동
+
 int store_pid(); //store P and bash
 void getCmdLine(char *file, char *buf, int size); //명령어 반환(comm)
 void find_kill(psinfo*, psinfo*, int, int); //터미널에서 돌아가는 모든 프로세스
@@ -51,12 +54,12 @@ void set_blank()
    
 void blank_all()
 {
-	for(int i = 2; i < lines - 6; i++)
+	for(int i = 2; i < lines - 3; i++)
 	{
 		move(i, 0);
 		printw(BLANK);
-		refresh();
 	}
+	refresh();
 }
 
 int set_ticker(int n_msecs)
@@ -78,7 +81,7 @@ int set_ticker(int n_msecs)
 void update_ps(int num)
 {
 	get_value();
-	get_display(lines);
+	get_display();
 
 }
 
@@ -86,7 +89,7 @@ int main(int argc, char* argv[])
 {	
 	int input;
 	char input_temp;
-	int delay = 5000; //5초마다 ps 갱신	
+	int delay = 500; //5초마다 ps 갱신	
 	
 	initscr();
 	clear();
@@ -109,24 +112,8 @@ int main(int argc, char* argv[])
 		refresh();
 		sleep(1);
 		input = getch();
-	
 
-		set_blank();
-		move(lines - 3, 0);
-		printw("input is %d", input);
-		refresh();
-		sleep(1);
-		// if (input == 27) {
-		// 	printf("ESC\n");
-		// 	break;
-		// }
 		if (input != 27) {
-
-			 set_blank();
-			move(lines - 3, 0);
-			printw("not 27");
-			refresh();
-
 			switch(input){
 				case 113:	//q
 					move(lines - 2, 0);
@@ -189,36 +176,60 @@ int main(int argc, char* argv[])
 					break;
 				}
 		} else {
-			set_blank();
-			move(lines - 3, 0);
-			printw("input is 27");
-			refresh();
+			input = getch();
 			input = getch();
 			switch (input) {
-				case 72:
+				case 65:	//up
 				 	set_blank();
 					move(lines - 3, 0);
 					printw("UP");
 					refresh();
 					sleep(2);
+					if (start > 0)
+						start--;
 					break;
-				case 80:
+				case 66:	//down
 					set_blank();
 					move(lines - 3, 0);
 					printw("DOWN");
 					refresh();
+					sleep(2);
+					
+
+					if ((map_num % 3) == 0 && start < P_SIZE - lines + 6)
+						start++;
+					else if ((map_num % 3) == 1 && start < P_SIZE - lines + 6)
+						start++;
+					else if ((map_num % 3) == 2 && start < P_SIZE - lines + 6)
+						start++;
+
+
 					break;
-				case 75:
+				case 68:	//left
 					set_blank();
 					move(lines - 3, 0);
 					printw("LEFT");
+					blank_all();
 					refresh();
+					sleep(2);
+					map_num--;
+					start = 0;
 					break;
-				case 77:
+				case 67:	//right
 					set_blank();
 					move(lines - 3, 0);
 					printw("RIGHT");
+					blank_all();
 					refresh();
+					sleep(2);
+					map_num++;
+					start = 0;
+					break;
+				default:
+					move(lines - 3, 0);
+					printw("you type wrong option please type it right..!");
+					refresh();
+					sleep(1);
 					break;
 			}
 		}	
@@ -312,8 +323,13 @@ void get_display(){
 	move(2, 0);
 	printw(" PID				      COMMAND STATE PPID   startTime runningTime check");
 	refresh();
-	
-	curindex = print_psinfo(P, P_SIZE, curindex, lines);
+
+	if ((map_num % 3) == 0)
+		curindex = print_psinfo(P, P_SIZE, curindex, lines);
+	else if ((map_num % 3) == 1)
+		curindex = print_psinfo(bash, bash_SIZE, curindex, lines);
+	else if ((map_num % 3) == 2)
+		curindex = print_psinfo(wantkill, WK_SIZE, curindex, lines);
 
 }
 
