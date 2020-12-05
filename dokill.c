@@ -54,7 +54,7 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 {
 	int input;
 	int i;
-	
+	sleep(1);
 	while(input != -1)
 	{
 		move(lines - 2, 0);

@@ -79,20 +79,17 @@ int set_ticker(int n_msecs)
 }
 
 void update_ps(int num)
-{
+{	
 	get_value();
 	get_display();
-	set_blank();
-	move(lines - 3, 0);
-	printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
-	refresh();
-	signal(SIGALRM, update_ps);
+
 }
 
 int main(int argc, char* argv[])
 {	
 	int input;
 	char input_temp;
+	// int delay = 500; //0.5초마다 ps 갱신	
 	int delay = 500; //0.5초마다 ps 갱신	
 	
 	initscr();
@@ -102,8 +99,8 @@ int main(int argc, char* argv[])
 	printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
 	refresh();
 	
-	get_value();
-	get_display();
+//	get_value();
+//	get_display();
 	
 	while(1){
 		signal(SIGALRM, update_ps);
@@ -112,8 +109,7 @@ int main(int argc, char* argv[])
 		move(lines - 3, 0);
 		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 		refresh();
-		
-		refresh();
+		noecho();
 		sleep(1);
 		input = getch();
 
@@ -184,20 +180,10 @@ int main(int argc, char* argv[])
 			input = getch();
 			switch (input) {
 				case 65:	//up
-				 // 	set_blank();
-					// move(lines - 3, 0);
-					// printw("UP");
-					// refresh();
-					// sleep(2);
 					if (start > 0)
 						start--;
 					break;
 				case 66:	//down
-					// set_blank();
-					// move(lines - 3, 0);
-					// printw("DOWN");
-					// refresh();
-					// sleep(2);
 					if ((map_num % 3) == 0 && start < P_SIZE - lines + 6)
 						start++;
 					else if ((map_num % 3) == 1 && start < bash_SIZE - lines + 6)
@@ -206,22 +192,10 @@ int main(int argc, char* argv[])
 						start++;
 					break;
 				case 68:	//left
-					// set_blank();
-					// move(lines - 3, 0);
-					// printw("LEFT");
-					// blank_all();
-					// refresh();
-					// sleep(2);
 					map_num--;
 					start = 0;
 					break;
 				case 67:	//right
-					set_blank();
-					move(lines - 3, 0);
-					printw("RIGHT");
-					blank_all();
-					refresh();
-					sleep(2);
 					map_num++;
 					start = 0;
 					break;
@@ -297,12 +271,14 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 	for(int i = 0;  i < size2; i++)
 	{
 		pid = ary2[i].pid;
+
 		for(int j = 0; j < size1; j++)
 		{
 			ppid = ary1[j].ppid;
 			if(pid == ppid)
 			{
 				wantkill[WK_SIZE].pid = ary1[j].pid;
+
 				strcpy(wantkill[WK_SIZE].comm, ary1[j].comm);
 				wantkill[WK_SIZE].state = ary1[j].state;
 				wantkill[WK_SIZE].ppid = ary1[j].ppid;
@@ -310,7 +286,7 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 				if(wantkill[WK_SIZE].pid == getpid()) // current process and it's bash
 						wantkill[WK_SIZE].checkTokill = 1;
 				wantkill[WK_SIZE++].start_time = ary1[j].start_time;
-				fprintf(stderr, "%d\n", WK_SIZE);
+			//	fprintf(stderr, "%d\n", WK_SIZE);
 			}
 		}
 	
@@ -319,18 +295,15 @@ void find_kill(psinfo* ary1, psinfo* ary2, int size1, int size2)
 
 
 void get_display(){
-	
 	move(2, 0);
 	printw(" PID				      COMMAND STATE PPID   startTime runningTime check");
 	refresh();
-
 	if ((map_num % 3) == 0)
 		curindex = print_psinfo(P, P_SIZE, curindex, lines);
 	else if ((map_num % 3) == 1)
 		curindex = print_psinfo(bash, bash_SIZE, curindex, lines);
 	else if ((map_num % 3) == 2)
 		curindex = print_psinfo(wantkill, WK_SIZE, curindex, lines);
-
 }
 
 void get_value()
@@ -346,18 +319,21 @@ void get_value()
 		int pid = P[i].pid;
 		store_psinfo(P, pid, i);
 	}
-	
-	
+
 	for(int i = 0; i < bash_SIZE; i++)
 	{
 		int pid = bash[i].pid;
 		store_psinfo(bash, pid, i);
 	}
+
+	move(lines - 3, 0);
 	
 	find_kill(P, bash, P_SIZE, bash_SIZE);
+	
 	set_CK(P, P_SIZE, CK, CK_SIZE);
 	set_CK(bash, bash_SIZE, CK, CK_SIZE);
 	set_CK(wantkill, WK_SIZE, CK, CK_SIZE);
+
 
 }
 

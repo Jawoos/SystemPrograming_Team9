@@ -82,13 +82,12 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 		else{
 			move(j + 3, 0);
 			printw("%4d %40s %5c %4d ", ary[i].pid, ary[i].comm, ary[i].state, ary[i].ppid);
-			refresh();
 			print_timedif(ary[i].start_time, ary[i].runningTime, tickspersec);
-			refresh();
 			printw("   %d\n", ary[i].checkTokill);
 			refresh();
 		}
 	}
+	
 	return i;
 
 }
