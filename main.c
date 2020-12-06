@@ -103,13 +103,13 @@ int main(int argc, char* argv[])
     init_pair(4, COLOR_WHITE, COLOR_BLUE);		//COMMAND
 
 
-	clear();
-	getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
-	move(0, 0);
-	attron(COLOR_PAIR(4));
-	printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
-	attron(COLOR_PAIR(1));
-	refresh();
+	// clear();
+	// getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
+	// move(0, 0);
+	// attron(COLOR_PAIR(4));
+	// printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
+	// attron(COLOR_PAIR(1));
+	// refresh();
 
 	
 //	get_value();
@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
 		refresh();
 		noecho();
 		input = getch();
+
 
 		if (input != 27) {
 			switch(input){
@@ -185,6 +186,8 @@ int main(int argc, char* argv[])
 					blank_all();
 					get_value();
 					get_display();
+					break;
+				case 410:
 					break;
 				default:
 					set_blank();
