@@ -298,7 +298,7 @@ void getCmdLine(char *file, char *buf, int size)
     srcFp = fopen(file, "r");      
 
     memset(buf, 0, sizeof(size));
-    fgets(buf, 500, srcFp);
+    fscanf(srcFp, "%s", buf);
     fclose(srcFp);
 //    free(buf);
 }
