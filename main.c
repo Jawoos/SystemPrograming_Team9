@@ -116,15 +116,18 @@ int main(int argc, char* argv[])
 	
 //	get_value();
 //	get_display();
+
+    clear();
+		
+	move(0, 0);
+	attron(COLOR_PAIR(4));
+	printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
+	attron(COLOR_PAIR(1));
+	refresh();
 	
 	while(1){
-		clear();
-		getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
-		move(0, 0);
-		attron(COLOR_PAIR(4));
-		printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
-		attron(COLOR_PAIR(1));
-		refresh();
+	getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
+		
 
 
 
