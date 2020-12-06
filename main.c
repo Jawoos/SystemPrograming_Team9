@@ -113,6 +113,7 @@ int main(int argc, char* argv[])
 	attron(COLOR_PAIR(1));
 	refresh();
 	
+	signal(SIGALRM, update_ps);
 	while(1){
 	getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
 		
@@ -120,7 +121,7 @@ int main(int argc, char* argv[])
 
 
 
-		signal(SIGALRM, update_ps);
+		//signal(SIGALRM, update_ps);
 		set_ticker(delay);
 		set_blank();
 		move(lines - 3, 0);
