@@ -118,8 +118,9 @@ void store_psinfo(psinfo* ary, int pid, int i)
 			input = fopen("stat", "r");
 		if(!input)
 		{
-			perror("open");
-			exit(1);
+			// perror("open");
+			// exit(1);
+			;
 		}
 	}
 	else

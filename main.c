@@ -250,11 +250,20 @@ int store_pid()
     char tempPath[256] = "\0";
     int i = 0;
 
-    dir = opendir("/proc");   
+    dir = opendir("/proc");
+//    memset(cmdLine, 0, sizeof(cmdLine));
+
+    
 
     while ((entry = readdir(dir)) != NULL) 
     {   
-		lstat(entry->d_name, &fileStat);                                           
+		lstat(entry->d_name, &fileStat); 
+
+		 // set_blank();
+		 // move(lines - 3, 0);
+		 // printw("test%d", i);
+		 // refresh();
+	//	sleep(1);                                          
                                                             
 		if(S_ISDIR(fileStat.st_mode))
 		{
@@ -271,11 +280,12 @@ int store_pid()
         		if(!strcmp(cmdLine, "bash"))
         		{
         			bash[bash_SIZE++].pid = pid;
-        		}	   
+        		}
+        	
 			}
 		}
     }
-
+//   	free(cmdLine);
     rewinddir(dir);
     closedir(dir);
     
@@ -285,11 +295,12 @@ int store_pid()
 void getCmdLine(char *file, char *buf, int size) 
 {
     FILE *srcFp;
-    srcFp = fopen(file, "r");          
+    srcFp = fopen(file, "r");      
 
     memset(buf, 0, sizeof(size));
     fgets(buf, 256, srcFp);
     fclose(srcFp);
+//    free(buf);
 }
 
 
@@ -362,7 +373,7 @@ void get_value()
 	reset_arry(bash, &bash_SIZE);
 	reset_arry(wantkill, &WK_SIZE);
 
-	P_SIZE = store_pid();
+	P_SIZE = store_pid();	//store at bash
 	
 	for(int i = 0; i < P_SIZE; i++)
 	{
