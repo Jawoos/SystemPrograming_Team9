@@ -251,9 +251,6 @@ int store_pid()
     int i = 0;
 
     dir = opendir("/proc");
-//    memset(cmdLine, 0, sizeof(cmdLine));
-
-    
 
     while ((entry = readdir(dir)) != NULL) 
     {   
@@ -274,7 +271,6 @@ int store_pid()
 			{
 				P[i++].pid = pid;
 	
-				strcpy(cmdLine, "\0");	
 				sprintf(tempPath, "/proc/%d/cmdline", pid); 
         		getCmdLine(tempPath, cmdLine, sizeof(cmdLine));
         
@@ -298,7 +294,7 @@ void getCmdLine(char *file, char *buf, int size)
     FILE *srcFp;
     srcFp = fopen(file, "r");      
 
-    //memset(buf, 0, sizeof(size));
+    memset(buf, 0, sizeof(size));
     fscanf(srcFp, "%s", buf);
     fclose(srcFp);
 //    free(buf);
