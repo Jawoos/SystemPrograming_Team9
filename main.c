@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 	while(1){
 		getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
 
-		//signal(SIGALRM, update_ps);
+		signal(SIGALRM, update_ps);
 		set_ticker(delay);
 		set_blank();
 		move(lines - 3, 0);
