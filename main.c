@@ -165,6 +165,7 @@ int main(int argc, char* argv[])
 					break;
 				case 116:	//t
 					echo();
+					signal(SIGALRM, SIG_IGN);
 					set_blank();
 					move(lines - 3, 0);
 					printw("enter time to not kill(exit : -1)");		//일정시간 입력받기
@@ -176,6 +177,7 @@ int main(int argc, char* argv[])
 						break;
 					set_time_except(wantkill, WK_SIZE, time);
 					set_time_except(bash, bash_SIZE, time);
+					signal(SIGALRM, update_ps);
 					break;
 				case 112:									//프로세스 상태 재출력 p 
 					blank_all();
