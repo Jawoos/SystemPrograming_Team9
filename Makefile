@@ -2,8 +2,8 @@ CC = gcc
 TARGET = out
 OBJS = main.o rd.o dokill.o
 
-CFLAGS = -Wall -g
-LDFLAGS = -lc -g
+CFLAGS = -Wall -g -std=gnu11
+LDFLAGS = -lc -g -std=gnu11
 LDLIBS = -lcurses
 
 all : $(TARGET)

@@ -39,7 +39,7 @@ void do_must_kill(psinfo* ary, int size){
 		//printf("print check of pid(%d) : %d and my pid is %d ppid is %d\n", ary[i].pid, ary[i].checkTokill, getpid(), getppid());
 		if(ary[i].checkTokill == 0){
 			//printf("processor (%d) will be killed\n", ary[i].pid);
-		//	sleep(60);
+			//	sleep(60);
 			total++;
 			kill(ary[i].pid, SIGKILL);
 		}
@@ -69,7 +69,7 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 		sleep(1);
 		addstr(BLANK);
 		refresh();
-		
+
 		for(i = 0; i < size1; i++) 
 		{
 			if(ary1[i].pid == input)
@@ -78,19 +78,19 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 				printw("pid(%d) is exception", ary1[i].pid);
 				refresh();
 				ary1[i].checkTokill = 1;
-               	}
+			}
 		}
 
 		for(i = 0; i < size2; i++)
-            	{
-                	if(ary2[i].pid == input)
-                   	{
-                   	 	move(lines -1, 0);
-                       	printw("pid(%d) is exception", ary2[i].pid);
-                       	refresh();
-                        ary2[i].checkTokill = 1;
-                    }
-                }
+		{
+			if(ary2[i].pid == input)
+			{
+				move(lines -1, 0);
+				printw("pid(%d) is exception", ary2[i].pid);
+				refresh();
+				ary2[i].checkTokill = 1;
+			}
+		}
 	}
 }
 

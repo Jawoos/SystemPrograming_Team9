@@ -21,25 +21,27 @@ void read_str(char *x, FILE* input) {  fscanf(input, "%s ", x);}
 void read_char(char *x, FILE* input) {  fscanf(input, "%c ", x);}
 
 int get_timesinceboot(long tickspersec) {
-  FILE *procuptime;
-  int sec, ssec;
+	FILE *procuptime;
+	int sec, ssec;
 
-  procuptime = fopen("/proc/uptime", "r");
-  fscanf(procuptime, "%d.%ds", &sec, &ssec);
-  fclose(procuptime);
-  return (sec*tickspersec)+ssec;
+	if((procuptime = fopen("/proc/uptime", "r")) == NULL)
+		return 0;
+	//  fgets("%d.%ds", &sec, &ssec, );
+	fscanf(procuptime, "%d.%ds", &sec, &ssec);
+	fclose(procuptime);
+	return (sec*tickspersec)+ssec;
 }
 
 void print_timedif(unsigned long long x, float rtime, long tickspersec) 
 {
-  int sinceboot = get_timesinceboot(tickspersec);
-  int running = sinceboot - x;
-  time_t rt = time(NULL) - (running / tickspersec);
-  char buf[1024];
+	int sinceboot = get_timesinceboot(tickspersec);
+	int running = sinceboot - x;
+	time_t rt = time(NULL) - (running / tickspersec);
+	char buf[1024];
 
-  strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
-  printw("%s (%8.2fs)", buf, rtime);
-  refresh();
+	strftime(buf, sizeof(buf), "%m.%d %H:%M", localtime(&rt));
+	printw("%s (%8.2fs)", buf, rtime);
+	refresh();
 }
 
 void make_Time(unsigned long long x, float* rtime)
@@ -47,9 +49,9 @@ void make_Time(unsigned long long x, float* rtime)
 	long tickspersec;
 	tickspersec = sysconf(_SC_CLK_TCK);
 	int sinceboot = get_timesinceboot(tickspersec);
- 	int running = sinceboot - x;
+	int running = sinceboot - x;
 
-  	*rtime = running / tickspersec + (running % tickspersec) / 100.0;
+	*rtime = running / tickspersec + (running % tickspersec) / 100.0;
 }
 
 int print_psinfo(psinfo* ary, int size, int curindex, int lines)
@@ -57,9 +59,9 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 	long tickspersec;
 	int i = 0;
 	int j = 0;
-	
+
 	tickspersec = sysconf(_SC_CLK_TCK);
-	
+
 	for(i = start, j = 0; j < lines - 6; i++, j++)
 	{
 
@@ -76,7 +78,7 @@ int print_psinfo(psinfo* ary, int size, int curindex, int lines)
 			refresh();
 		}
 	}
-	
+
 	return i;
 
 }
@@ -90,7 +92,7 @@ void reset_arry(psinfo* ary, int* size)
 		ary[i].state = '\0';
 		ary[i].ppid = -1;
 		ary[i].start_time = 0;
-		
+
 	}
 	*size = 0;
 
@@ -102,30 +104,31 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	int cnt = 0;
 	int temp;
 	char nowpwd[255];
-	
+
 	getcwd(nowpwd, 255); //현재 경로 저장
-	
+
 	FILE* input;
 
 	input = NULL;
-	
+
 	sprintf(curPid, "%d", pid);
-	
+
 	if(pid)
 	{	
 		chdir("/proc");
 		if(chdir(curPid) == 0)
-			input = fopen("stat", "r");
-		if(!input)
-		{
-			// perror("open");
-			// exit(1);
-			;
-		}
+			if((input = fopen("stat", "r")) == NULL)
+				return;
+		// if(!input)
+		// {
+		// 	 perror("open");
+		// 	 exit(1);
+		// 	;
+		// }
 	}
 	else
 		input = stdin;
-		
+
 	read_one(&(ary[i].pid), input);
 	read_str(ary[i].comm, input);
 	read_char(&(ary[i].state), input);
@@ -142,9 +145,9 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	cnt = 0;		
 	read_unsigned(&(ary[i].start_time), input);
 	make_Time(ary[i].start_time, &(ary[i].runningTime));
-	
+
 	chdir(nowpwd);
 	rewind(input);
 	fclose(input);
-	
+
 }
