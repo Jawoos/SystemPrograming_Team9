@@ -81,10 +81,12 @@ int set_ticker(int n_msecs)
 
 void update_ps(int num)
 {	
+	signal(SIGALRM, SIG_IGN);
 	get_value();
 	get_display();
 	move(lines - 3, strsize);
 	refresh();
+	signal(SIGALRM, update_ps);
 }
 
 int main(int argc, char* argv[])
