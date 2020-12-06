@@ -123,7 +123,6 @@ int main(int argc, char* argv[])
 		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
 		refresh();
 		noecho();
-		sleep(1);
 		input = getch();
 
 		if (input != 27) {
@@ -154,6 +153,7 @@ int main(int argc, char* argv[])
 					break;
 				case 98:	//b
 					echo();
+					signal(SIGALRM, SIG_IGN);
 					set_blank();
 					move(lines - 3, 0);
 					printw("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
@@ -163,6 +163,7 @@ int main(int argc, char* argv[])
 					move(lines - 2, 0);
 					if(input_temp == 'Y' || input_temp == 'y')
 						do_must_kill(bash, bash_SIZE);	//bash 프로세서 종료
+					signal(SIGALRM, update_ps);
 					break;
 				case 116:	//t
 					echo();

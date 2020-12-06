@@ -59,6 +59,9 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 	while(input != -1)
 	{
 		move(lines - 2, 0);
+		printw("\t\t\t\t\t");
+		refresh();
+		move(lines - 2, 0);
 		printw("what is want to kill pid?(exit : -1)");
 		scanw("%d", &input);
 		refresh();
