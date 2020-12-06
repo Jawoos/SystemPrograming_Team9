@@ -20,7 +20,7 @@
 psinfo P[MAX]; //proc에 있는 모든 프로세스 저장
 int P_SIZE = 0; //P 배열 크기
 	
-psinfo bash[30];//bash만 들어있음 터미널에서 돌아가는 프로세스는 그프로세스의 PPID가 bash PID 이다 
+psinfo bash[MAX];//bash만 들어있음 터미널에서 돌아가는 프로세스는 그프로세스의 PPID가 bash PID 이다 
 int bash_SIZE = 0;
 
 psinfo wantkill[MAX]; //죽이고 싶은 프로세스 저장
