@@ -117,14 +117,12 @@ void store_psinfo(psinfo* ary, int pid, int i)
 	{	
 		chdir("/proc");
 		if(chdir(curPid) == 0)
-			if((input = fopen("stat", "r")) == NULL)
-				return;
-		// if(!input)
-		// {
-		// 	 perror("open");
-		// 	 exit(1);
-		// 	;
-		// }
+			input = fopen("stat", "r");
+		// 		return;
+		if(!input)
+		{
+			 return;
+		}
 	}
 	else
 		input = stdin;
