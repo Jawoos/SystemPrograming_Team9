@@ -31,7 +31,7 @@ int CK_SIZE = 0;
 
 int lines, cols;
 int curindex = 0;
-int strsize = strlen("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
+int strsize = strlen("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time)");
 
 int start = 0;	//for문 시작 지점 -> 위아래 스크롤 구현
 int map_num = 0;	//좌우 이동
@@ -105,18 +105,6 @@ int main(int argc, char* argv[])
     init_pair(4, COLOR_WHITE, COLOR_BLUE);		//COMMAND
 
 
-	// clear();
-	// getmaxyx(stdscr,lines,cols); // 현재 띄워진 창의 행,열 크기 저장 
-	// move(0, 0);
-	// attron(COLOR_PAIR(4));
-	// printw("this terminal pid : %d", getppid()); //현재 프로세스가 실행되고 있는 터미널pid
-	// attron(COLOR_PAIR(1));
-	// refresh();
-
-	
-//	get_value();
-//	get_display();
-
     clear();
 		
 	move(0, 0);
@@ -136,7 +124,7 @@ int main(int argc, char* argv[])
 		set_ticker(delay);
 		set_blank();
 		move(lines - 3, 0);
-		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time, p: display status again)");
+		printw("enter what you want to do?(q:exit, k:kill WANTKILL PROCESS, b:kill BASH PROCESS, e:enter exception pid, t:enter time)");
 		refresh();
 		noecho();
 		input = getch();
@@ -202,11 +190,6 @@ int main(int argc, char* argv[])
 					set_CK(P, P_SIZE, CK, CK_SIZE);
 
 					signal(SIGALRM, update_ps);
-					break;
-				case 112:									//프로세스 상태 재출력 p 
-					blank_all();
-					get_value();
-					get_display();
 					break;
 				case 410:
 					break;
