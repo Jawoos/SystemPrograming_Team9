@@ -153,6 +153,7 @@ int main(int argc, char* argv[])
 					set_CK(P, P_SIZE, CK, CK_SIZE);
 					break;
 				case 98:	//b
+					echo();
 					set_blank();
 					move(lines - 3, 0);
 					printw("If you kill bash, that can effect to other linux users of system. Do you really want to kill bash?(Y/N)");
