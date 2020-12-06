@@ -84,15 +84,13 @@ void get_pid(psinfo* ary1, int size1, psinfo* ary2, int size2, int lines)
 		for(i = 0; i < size2; i++)
             	{
                 	if(ary2[i].pid == input)
-                   	 {
+                   	{
                    	 	move(lines -1, 0);
                        	printw("pid(%d) is exception", ary2[i].pid);
                        	refresh();
-                        	ary2[i].checkTokill = 1;
-                    	}
-
+                        ary2[i].checkTokill = 1;
+                    }
                 }
-               
 	}
 }
 
@@ -115,5 +113,4 @@ void set_CK(psinfo* ary, int size, int* CK, int cksize) //set checkTokill values
 				ary[i].checkTokill = 1;
 		}
 	}
-
 }

@@ -193,6 +193,11 @@ int main(int argc, char* argv[])
 						break;
 					set_time_except(wantkill, WK_SIZE, time);
 					set_time_except(bash, bash_SIZE, time);
+
+					store_CK(wantkill, WK_SIZE, CK, &CK_SIZE);
+					store_CK(bash, bash_SIZE, CK, &CK_SIZE);
+					set_CK(P, P_SIZE, CK, CK_SIZE);
+
 					signal(SIGALRM, update_ps);
 					break;
 				case 112:									//프로세스 상태 재출력 p 
@@ -403,7 +408,8 @@ void set_time_except(psinfo* ary, int size, int t){
 			printw(BLANK);
 			move(lines - 2, 0);
 		    	ary[i].checkTokill = 1;
-		    	printw("pid(%d) is exception", ary[i].pid);
+		    //	printw("pid(%d) is exception", ary[i].pid);
+		    	printw("pid(%d) is exception = %d", ary[i].pid, ary[i].checkTokill);
 		    	refresh();
 		    	sleep(1); //1초마다 예외된 값 출력
 		   
