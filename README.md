@@ -20,7 +20,7 @@
 - #include <ncurses.h>
 - #include "rd.h"
 ## 사용 방법
-sudo apt-get install ncurses 를 통해 라이브러리를 다운로드하고 make를 통해 실행파일을 만들어준다.
+sudo apt-get install libncurses5-dev libncursesw5-dev 를 통해 라이브러리를 다운로드하고 make를 통해 실행파일을 만들어준다.
 
 프로그램 실행 후 사용법은 다음과 같다.
 
