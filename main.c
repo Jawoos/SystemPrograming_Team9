@@ -246,8 +246,8 @@ int store_pid()
     struct stat fileStat;         
 
     int pid;                        
-    char cmdLine[256] = "\0";
-    char tempPath[256] = "\0";
+    char cmdLine[500] = "\0";
+    char tempPath[500] = "\0";
     int i = 0;
 
     dir = opendir("/proc");
@@ -298,7 +298,7 @@ void getCmdLine(char *file, char *buf, int size)
     srcFp = fopen(file, "r");      
 
     memset(buf, 0, sizeof(size));
-    fgets(buf, 256, srcFp);
+    fgets(buf, 500, srcFp);
     fclose(srcFp);
 //    free(buf);
 }
