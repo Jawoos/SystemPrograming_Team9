@@ -20,6 +20,10 @@
 - #include <ncurses.h>
 - #include "rd.h"
 ## 사용 방법
+sudo apt install lcurses 를 통해 lcurses를 다운로드하고 make를 통해 실행파일을 만들어준다.
+
+프로그램 실행 후 사용법은 다음과 같다.
+
 - q: 프로그램 종료
 - k: 현재 실행중인 bash 및 시스템 프로세스 제외한 나머지 프로세스 종료
 - b: 현재 실행중인 bash 프로세스 종료
